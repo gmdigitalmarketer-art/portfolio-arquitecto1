@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Arquitecto</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    header {
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #222;
+    }
+
+    h1 {
+      margin: 0;
+      font-weight: 400;
+    }
+
+    .section {
+      padding: 40px;
+    }
+
+    .category {
+      margin-bottom: 40px;
+    }
+
+    .category h2 {
+      font-weight: 300;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+
+    .projects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .project {
+      border: 1px solid #222;
+      padding: 15px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .project:hover {
+      background-color: #111;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+
+    .modal img, .modal video {
+      max-width: 90%;
+      margin-bottom: 20px;
+    }
+
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Nombre del Arquitecto</h1>
+</header>
+
+<div class="section" id="projects"></div>
+
+<div class="modal" id="modal">
+  <span class="close" onclick="closeModal()">&times;</span>
+  <div id="modal-content"></div>
+</div>
+
+<script>
+const data = {
+  "Arquitectura Hospitalaria": [
+    {
+      nombre: "Hospital Central de Mendoza",
+      ubicacion: "Mendoza",
+      anio: "2021",
+      rol: "Dirección de obra",
+      descripcion: "Renovación hospitalaria",
+      imagenes: ["assets/hospital1.jpg"],
+      video: ""
+    },
+    {
+      nombre: "Unidad de Diagnóstico",
+      ubicacion: "Guaymallén",
+      anio: "2022",
+      rol: "Proyecto",
+      descripcion: "Centro de diagnóstico",
+      imagenes: ["assets/diagnostico.jpg"],
+      video: ""
+    }
+  ],
+  "Complejos Deportivos": [
+    {
+      nombre: "Campo de Hockey - Ciudad de Mendoza",
+      ubicacion: "Mendoza",
+      anio: "2020",
+      rol: "Ejecución",
+      descripcion: "Complejo deportivo",
+      imagenes: ["assets/hockey.jpg"],
+      video: ""
+    },
+    {
+      nombre: "Villa Deportiva Malvinas Argentinas",
+      ubicacion: "Mendoza",
+      anio: "2019",
+      rol: "Dirección",
+      descripcion: "Infraestructura deportiva",
+      imagenes: ["assets/villa.jpg"],
+      video: ""
+    }
+  ],
+  "Infraestructura": [
+    {
+      nombre: "Túnel Cacheuta",
+      ubicacion: "Mendoza",
+      anio: "2018",
+      rol: "Dirección",
+      descripcion: "Obra vial",
+      imagenes: ["assets/tunel1.jpg"],
+      video: "assets/tunel.mp4"
+    }
+  ]
+};
+
+const container = document.getElementById("projects");
+
+for (let category in data) {
+  const section = document.createElement("div");
+  section.className = "category";
+
+  section.innerHTML = `<h2>${category}</h2>`;
+
+  const grid = document.createElement("div");
+  grid.className = "projects";
+
+  data[category].forEach(project => {
+    const card = document.createElement("div");
+    card.className = "project";
+    card.innerHTML = `<h3>${project.nombre}</h3><p>${project.ubicacion}</p>`;
+    card.onclick = () => openModal(project);
+    grid.appendChild(card);
+  });
+
+  section.appendChild(grid);
+  container.appendChild(section);
+}
+
+function openModal(project) {
+  const modal = document.getElementById("modal");
+  const content = document.getElementById("modal-content");
+
+  content.innerHTML = `
+    <h2>${project.nombre}</h2>
+    <p>${project.ubicacion} - ${project.anio}</p>
+    <p>${project.rol}</p>
+    <p>${project.descripcion}</p>
+  `;
+
+  project.imagenes.forEach(img => {
+    const image = document.createElement("img");
+    image.src = img;
+    content.appendChild(image);
+  });
+
+  if (project.video) {
+    const video = document.createElement("video");
+    video.src = project.video;
+    video.controls = true;
+    content.appendChild(video);
+  }
+
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>
